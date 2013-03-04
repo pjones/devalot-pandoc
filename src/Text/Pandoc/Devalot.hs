@@ -13,6 +13,7 @@ terms contained in the LICENSE file.
 module Text.Pandoc.Devalot
        ( devalotTransformStrDef
        , devalotTransformStr
+       , devalotTransform
        , module Text.Pandoc.Devalot.Code
        ) where
 

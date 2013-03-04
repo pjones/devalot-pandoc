@@ -1,0 +1,4 @@
+* TODO Should the "include" entry be removed?
+  When processing a code block with an "include" key in the
+  association list should that entry be removed when substituting in
+  the contents of the file?

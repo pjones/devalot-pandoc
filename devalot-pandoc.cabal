@@ -1,0 +1,25 @@
+name:          devalot-pandoc
+version:       0.1.0.0
+synopsis:      Pandoc extensions for Devalot.com
+license:       BSD3
+license-file:  LICENSE
+author:        Peter Jones <pjones@devalot.com>
+maintainer:    Peter Jones <pjones@devalot.com>
+copyright:     Copyright (c) 2013 Peter Jones
+category:      Text
+build-type:    Simple
+cabal-version: >= 1.8
+-- description:         
+
+library
+  exposed-modules: Text.Pandoc.Devalot
+                   Text.Pandoc.Devalot.Code
+  ghc-options: -Wall
+  hs-source-dirs: src
+  build-depends: base   == 4.5.*
+               , pandoc == 1.10.*
+
+executable devalot-pandoc
+  main-is: devalot-pandoc.hs
+  ghc-options: -Wall
+  build-depends: base, devalot-pandoc

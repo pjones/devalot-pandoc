@@ -12,12 +12,15 @@ cabal-version: >= 1.8
 -- description:         
 
 library
-  exposed-modules: Text.Pandoc.Devalot
-                   Text.Pandoc.Devalot.Code
+  exposed-modules: 
+    Text.Pandoc.Devalot
+    Text.Pandoc.Devalot.Code
+
   ghc-options: -Wall
   hs-source-dirs: src
-  build-depends: base   == 4.5.*
-               , pandoc == 1.10.*
+  build-depends: 
+    base   >= 4.5  && < 5,
+    pandoc >= 1.10 && < 1.11
 
 executable devalot-pandoc
   main-is: devalot-pandoc.hs

@@ -25,4 +25,4 @@ library
 executable devalot-pandoc
   main-is: devalot-pandoc.hs
   ghc-options: -Wall
-  build-depends: base, devalot-pandoc
+  build-depends: base, pandoc, devalot-pandoc

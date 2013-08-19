@@ -13,8 +13,9 @@ terms contained in the LICENSE file.
 module Main where
 
 --------------------------------------------------------------------------------
+import Text.Pandoc
 import Text.Pandoc.Devalot
 
 --------------------------------------------------------------------------------
 main :: IO ()
-main = getContents >>= devalotTransformStrDef >>= putStr
+main = toJsonFilter devalotTransform

@@ -15,10 +15,12 @@ module Text.Pandoc.Devalot
        , devalotTransformStr
        , devalotTransform
        , module Text.Pandoc.Devalot.Code
+       , module Text.Pandoc.Devalot.Counter
        ) where
 
 --------------------------------------------------------------------------------
 import Text.Pandoc.Devalot.Code
+import Text.Pandoc.Devalot.Counter
 
 --------------------------------------------------------------------------------
 import Control.Monad (foldM)
@@ -26,8 +28,10 @@ import Text.Pandoc
 
 --------------------------------------------------------------------------------
 devalotTransform :: Pandoc -> IO Pandoc
-devalotTransform p = foldM (flip ($)) p transforms
-  where transforms = [ bottomUpM includeFile
+devalotTransform p = do
+  counterRef <- newCounterRef
+  foldM (flip ($)) p [ bottomUpM includeFile
+                     , bottomUpM (counterFilter counterRef)
                      ]
 
 --------------------------------------------------------------------------------

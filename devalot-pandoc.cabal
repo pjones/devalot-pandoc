@@ -24,7 +24,9 @@ flag maintainer
 ------------------------------------------------------------------------------
 library
   exposed-modules: 
+    Text.Devalot
     Text.Devalot.FileList
+    Text.Devalot.FileStitch
     Text.Pandoc.Devalot
     Text.Pandoc.Devalot.Code
 
@@ -51,7 +53,10 @@ executable devalot-pandoc
   if flag(maintainer)
     ghc-options: -Werror
 
-  build-depends: base, pandoc-types, devalot-pandoc
+  build-depends: base
+               , pandoc-types
+               , devalot-pandoc
+               , optparse-applicative >= 0.7.0.2 && < 0.8
 
 ------------------------------------------------------------------------------
 test-suite test

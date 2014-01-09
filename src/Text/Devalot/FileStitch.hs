@@ -21,15 +21,19 @@ import System.IO
 import Text.Devalot.FileList
 
 --------------------------------------------------------------------------------
--- | Copy the contents of each file to the given handle.
-hStitch :: FileList -> Handle -> IO ()
-hStitch srcs = go (files srcs) where
+-- | Copy the contents of each file to the given handle.  The @Text@
+-- argument is a delimiter to use between the files.
+hStitch :: FileList -> Text -> Handle -> IO ()
+hStitch srcs delimiter = go (files srcs) where
   go :: [Text] -> Handle -> IO ()
   go [] _     = return ()
-  go (x:xs) h = T.readFile (T.unpack x) >>= T.hPutStr h >> go xs h
+  go (x:xs) h = do content <- T.readFile (T.unpack x)
+                   T.hPutStr h content
+                   T.hPutStr h delimiter
+                   go xs h
 
 --------------------------------------------------------------------------------
 -- | Copy the contents of each file in the 'FileList' to the
--- destination file.
-stitch :: FileList -> FilePath -> IO ()
-stitch srcs dest = withFile dest WriteMode (hStitch srcs)
+-- destination file.  See 'hStitch' for more information.
+stitch :: FileList -> Text -> FilePath -> IO ()
+stitch srcs delm dest = withFile dest WriteMode (hStitch srcs delm)

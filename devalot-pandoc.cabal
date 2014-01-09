@@ -57,9 +57,10 @@ executable devalot-pandoc
     ghc-options: -Werror
 
   build-depends: base
-               , pandoc-types
                , devalot-pandoc
                , optparse-applicative >= 0.7.0.2 && < 0.8
+               , pandoc-types
+               , text
 
 ------------------------------------------------------------------------------
 test-suite test

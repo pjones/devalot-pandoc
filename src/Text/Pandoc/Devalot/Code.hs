@@ -17,13 +17,26 @@ module Text.Pandoc.Devalot.Code
 
 --------------------------------------------------------------------------------
 import Control.Applicative
+import Control.Exception
 import Control.Monad ((<=<))
 import Data.Char (isSpace)
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
+import Data.Typeable
 import Text.Pandoc
+
+--------------------------------------------------------------------------------
+data MissingTokenError = MissingTokenError String String
+  deriving (Typeable)
+
+instance Show MissingTokenError where
+  show (MissingTokenError file token) =
+    "MissingTokenError: " ++ "can't find token '" ++
+    token ++ "' in " ++ file
+
+instance Exception MissingTokenError
 
 --------------------------------------------------------------------------------
 -- | Copies the contents of a file into the body of a code block.  The
@@ -57,7 +70,7 @@ readCodeFile path Nothing      = readFile path
 readCodeFile path (Just token) = do
   contents <- T.readFile path
   case newNarrow token contents <|> oldNarrow token contents of
-    Nothing  -> error $ "can't find token '" ++ token ++ "' in " ++ path
+    Nothing  -> throwIO (MissingTokenError path token)
     Just txt -> return $! T.unpack (removeIndent txt)
 
 --------------------------------------------------------------------------------

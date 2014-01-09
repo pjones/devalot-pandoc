@@ -1,7 +1,6 @@
 # Copyright and Authors
 
-    Copyright (c) 2013 Peter Jones <pjones@devalot.com>
-    All rights reserved.
+    Copyright (C) 2013, 2014 Peter Jones <pjones@devalot.com>
 
 # License (BSD3)
 

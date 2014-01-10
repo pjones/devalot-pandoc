@@ -42,7 +42,7 @@ parser = subparser $ mconcat
 stitchCmd :: Parser Command
 stitchCmd = Stitch <$> argument str (metavar "FILE")
                    <*> (strOption (long "delimiter") <|> pure "\n")
-                   <*> (switch (long "list"))
+                   <*> switch (long "list")
 
 --------------------------------------------------------------------------------
 loadFileList :: FilePath -> (FileList -> IO ()) -> IO ()

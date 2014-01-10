@@ -58,8 +58,8 @@ instance Exception MissingTokenError
 includeFile :: Block -> IO Block
 includeFile cb@(CodeBlock (x, y, alist) _) =
   case lookup "include" alist of
-       Just f  -> return . (CodeBlock (x, y, alist)) =<< newtxt f
-       Nothing -> return cb
+    Just f  -> return . CodeBlock (x, y, alist) =<< newtxt f
+    Nothing -> return cb
   where newtxt f = readCodeFile f (lookup "token" alist)
 includeFile x = return x
 
@@ -119,4 +119,4 @@ removeIndent txt = T.unlines . strip (indent txt) . T.lines $ txt
     indent = T.length . T.takeWhile isSpace
 
     strip :: Int -> [Text] -> [Text]
-    strip n = map (\t -> T.drop n t)
+    strip n = map (T.drop n)

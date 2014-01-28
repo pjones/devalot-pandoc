@@ -25,6 +25,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import Data.Typeable
+import Text.Devalot.SpecialComments
 import Text.Pandoc
 
 --------------------------------------------------------------------------------
@@ -71,7 +72,7 @@ readCodeFile path (Just token) = do
   contents <- T.readFile path
   case newNarrow token contents <|> oldNarrow token contents of
     Nothing  -> throwIO (MissingTokenError path token)
-    Just txt -> return $! T.unpack (removeIndent txt)
+    Just txt -> (return . T.unpack . specialComments path . removeIndent) txt
 
 --------------------------------------------------------------------------------
 -- | New style @<<:@/@:>>@ tokens.

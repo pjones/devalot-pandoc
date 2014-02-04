@@ -21,6 +21,7 @@ module Text.Pandoc.Devalot
 --------------------------------------------------------------------------------
 import Text.Pandoc.Devalot.Code
 import Text.Pandoc.Devalot.Counter
+import Text.Pandoc.Devalot.Exec
 
 --------------------------------------------------------------------------------
 import Control.Monad (foldM)
@@ -31,6 +32,7 @@ devalotTransform :: Pandoc -> IO Pandoc
 devalotTransform p = do
   counterRef <- newCounterRef
   foldM (flip ($)) p [ bottomUpM includeFile
+                     , bottomUpM executeBlock
                      , bottomUpM (counterFilter counterRef)
                      ]
 

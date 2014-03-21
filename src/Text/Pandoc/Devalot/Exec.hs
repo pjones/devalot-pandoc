@@ -31,22 +31,25 @@ instance Exception FailedCommandError
 
 --------------------------------------------------------------------------------
 executeBlock :: Block -> IO Block
-executeBlock cb@(CodeBlock (x, y, alist) _) =
+executeBlock cb@(CodeBlock (x, y, alist) input) =
   case lookup "exec" alist of
-    Just cmd -> return . CodeBlock (x, y, alist) =<< execute cmd
+    Just cmd -> return . CodeBlock (x, y, alist) =<< execute input cmd
     Nothing  -> return cb
 executeBlock x = return x
 
 --------------------------------------------------------------------------------
-execute :: String -> IO String
-execute cmd = do
-  (exitcode, sout, _) <- readProcessWithExitCode "/bin/sh" args ""
+execute :: String -> String -> IO String
+execute input cmd = do
+  (exitcode, sout, _) <- readProcessWithExitCode "/bin/sh" args input'
 
   case (exitcode, sout) of
     (ExitSuccess, x) -> return x
     _ -> throwIO (FailedCommandError cmd)
 
   where
-    -- This really should parse the cmd.
+    -- Pandoc doesn't include final newline.
+    input' :: String
+    input' = if null input then input else input ++ "\n"
+
     args :: [String]
-    args = "-c" : words cmd
+    args = ["-c", cmd]

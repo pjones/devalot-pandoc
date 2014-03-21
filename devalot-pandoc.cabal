@@ -1,5 +1,5 @@
 name:          devalot-pandoc
-version:       0.4.0.0
+version:       0.4.1.0
 synopsis:      Pandoc extensions for Devalot.com
 license:       BSD3
 license-file:  LICENSE.md

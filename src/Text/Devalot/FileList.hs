@@ -54,7 +54,7 @@ parseFile file = (convert . parse) <$> T.readFile file where
 
   -- Convert the parsec error to a string.
   convert :: Either ParseError FileList -> Either String FileList
-  convert = either (Left . show) (Right . id)
+  convert = either (Left . show) Right
 
 --------------------------------------------------------------------------------
 -- | Parses a list of file names.

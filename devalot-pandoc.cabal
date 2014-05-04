@@ -1,11 +1,11 @@
 name:          devalot-pandoc
-version:       0.4.1.0
+version:       0.4.1.1
 synopsis:      Pandoc extensions for Devalot.com
 license:       BSD3
 license-file:  LICENSE.md
 author:        Peter Jones <pjones@devalot.com>
 maintainer:    Peter Jones <pjones@devalot.com>
-copyright:     Copyright (c) 2013 Peter Jones
+copyright:     Copyright (c) 2013, 2014 Peter Jones
 category:      Text
 build-type:    Simple
 cabal-version: >= 1.8
@@ -40,7 +40,7 @@ library
     Text.Pandoc.Devalot.Exec
 
   hs-source-dirs: src
-  ghc-options: -Wall
+  ghc-options: -Wall -fwarn-incomplete-uni-patterns
 
   if flag(maintainer)
     ghc-options: -Werror
@@ -50,25 +50,25 @@ library
     DeriveDataTypeable
 
   build-depends: base         >= 4.5    && < 5.0
-               , containers   >= 0.5    && < 0.6
-               , filepath     >= 1.3.0  && < 1.4
-               , pandoc       >= 1.12.1 && < 1.12.3
-               , pandoc-types >= 1.12.3 && < 1.13
+               , containers   >= 0.5    && < 1.0
+               , filepath     >= 1.3.0  && < 2.0
+               , pandoc       >= 1.12.1 && < 2.0
+               , pandoc-types >= 1.12.3 && < 2.0
                , parsec       >= 3.1.4  && < 3.2
-               , process      >= 1.1    && < 1.2
-               , text         >= 0.11   && < 0.12
+               , process      >= 1.1    && < 2.0
+               , text         >= 0.11   && < 2.0
 
 ------------------------------------------------------------------------------
 executable devalot-pandoc
   main-is: devalot-pandoc.hs
-  ghc-options: -Wall
+  ghc-options: -Wall -fwarn-incomplete-uni-patterns
 
   if flag(maintainer)
     ghc-options: -Werror
 
   build-depends: base
                , devalot-pandoc
-               , optparse-applicative >= 0.7.0.2 && < 0.8
+               , optparse-applicative >= 0.7.0.2 && < 1.0
                , pandoc-types
                , text
 
@@ -81,22 +81,22 @@ test-suite test
   extensions: OverloadedStrings
   build-depends: base
                , devalot-pandoc
-               , hspec       >= 1.8.1.1 && < 1.9
-               , tasty       >= 0.7     && < 0.8
-               , tasty-hspec >= 0.1     && < 0.2
+               , hspec       >= 1.8.1.1 && < 2.0
+               , tasty       >= 0.7     && < 1.0
+               , tasty-hspec >= 0.1     && < 1.0
                , text
 
 ------------------------------------------------------------------------------
-test-suite hlint
-  type: exitcode-stdio-1.0
-  main-is: hlint.hs
-  ghc-options: -w
-  hs-source-dirs: test
+-- test-suite hlint
+--   type: exitcode-stdio-1.0
+--   main-is: hlint.hs
+--   ghc-options: -w
+--   hs-source-dirs: test
 
-  if !flag(test-hlint)
-    buildable: False
-  else
-    build-depends:
-      base,
-      hlint >= 1.7
+--   if !flag(test-hlint)
+--     buildable: False
+--   else
+--     build-depends:
+--       base,
+--       hlint >= 1.7
 

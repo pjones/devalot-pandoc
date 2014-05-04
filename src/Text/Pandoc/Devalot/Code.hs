@@ -20,6 +20,7 @@ import Control.Applicative
 import Control.Exception
 import Control.Monad ((<=<))
 import Data.Char (isSpace)
+import Data.Maybe (listToMaybe)
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -57,22 +58,33 @@ instance Exception MissingTokenError
 --
 -- Taken from <http://johnmacfarlane.net/pandoc/scripting.html#include-files>.
 includeFile :: Block -> IO Block
-includeFile cb@(CodeBlock (x, y, alist) _) =
+includeFile cb@(CodeBlock (blkid, classes, alist) _) =
   case lookup "include" alist of
-    Just f  -> return . CodeBlock (x, y, alist) =<< newtxt f
+    Just f  -> return . CodeBlock (blkid, classes, alist) =<< newtxt f
     Nothing -> return cb
-  where newtxt f = readCodeFile f (lookup "token" alist)
+  where newtxt f = readCodeFile f classes (lookup "token" alist)
 includeFile x = return x
 
 --------------------------------------------------------------------------------
 -- | Read a file with code in it, possibly narrowing to a token.
-readCodeFile :: FilePath -> Maybe String -> IO String
-readCodeFile path Nothing      = readFile path
-readCodeFile path (Just token) = do
-  contents <- T.readFile path
-  case newNarrow token contents <|> oldNarrow token contents of
-    Nothing  -> throwIO (MissingTokenError path token)
-    Just txt -> (return . T.unpack . specialComments path . removeIndent) txt
+readCodeFile :: FilePath -> [String] -> Maybe String -> IO String
+readCodeFile path classes tokenM = case tokenM of
+  Nothing    -> transformS <$> readFile path
+  Just token -> do
+    contents <- T.readFile path
+    case newNarrow token contents <|> oldNarrow token contents of
+      Nothing  -> throwIO (MissingTokenError path token)
+      Just txt -> (return . T.unpack . transformT) txt
+
+  where
+    transformS :: String -> String
+    transformS = T.unpack . transformT . T.pack
+
+    transformT :: Text -> Text
+    transformT = specialComments path lang . removeIndent
+
+    lang :: String
+    lang = maybe "" id (listToMaybe classes)
 
 --------------------------------------------------------------------------------
 -- | New style @<<:@/@:>>@ tokens.

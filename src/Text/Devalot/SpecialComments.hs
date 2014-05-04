@@ -20,7 +20,6 @@ import qualified Data.Map as M
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T
-import System.FilePath (takeExtension)
 import Text.Parsec hiding (parse)
 import Text.Parsec.Text
 
@@ -48,11 +47,13 @@ instance Monoid MatchType where
 
 --------------------------------------------------------------------------------
 -- | Update source code comments which contain special instructions.
-specialComments :: FilePath -> Text -> Text
-specialComments file txt = maybe txt parse (lookupParsers $ takeExtension file)
+specialComments :: FilePath -> String -> Text -> Text
+specialComments file lang txt =
+  maybe txt parse (lookupParsers $ T.pack lang)
+
   where
-    lookupParsers :: String -> Maybe CommentStyle
-    lookupParsers ext = M.lookup (T.pack ext) commentMarkers
+    lookupParsers :: Text -> Maybe CommentStyle
+    lookupParsers = flip M.lookup commentMarkers
 
     parser :: CommentStyle -> Parser Text
     parser style = searchAndReplace style replaceFunctions
@@ -65,8 +66,8 @@ specialComments file txt = maybe txt parse (lookupParsers $ takeExtension file)
 --------------------------------------------------------------------------------
 -- | Map of comment styles for each supported language.
 commentMarkers :: CommentMarkers
-commentMarkers = M.fromList [ (".rb", SingleLine "# ")
-                            , (".hs", SingleLine "-- ")
+commentMarkers = M.fromList [ ("ruby",    SingleLine "# ")
+                            , ("haskell", SingleLine "-- ")
                             ]
 
 --------------------------------------------------------------------------------

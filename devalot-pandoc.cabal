@@ -9,7 +9,14 @@ copyright:     Copyright (c) 2013, 2014 Peter Jones
 category:      Text
 build-type:    Simple
 cabal-version: >= 1.8
--- description:         
+tested-with:   GHC==7.6.3, GHC==7.8.2
+homepage:      https://github.com/pjones/devalot-pandoc
+bug-reports:   https://github.com/pjones/devalot-pandoc/issues
+description:         
+  Extensions to Pandoc to support inserting code into documents from
+  external files, subsets of code files, and executing scripts and
+  inserting their output into the document.  There's also a few other
+  Pandoc filters included to alter a document in one way or another.
 
 ------------------------------------------------------------------------------
 extra-source-files:
@@ -87,6 +94,7 @@ test-suite test
                , text
 
 ------------------------------------------------------------------------------
+-- Not working with GHC 7.8.2 yet.
 -- test-suite hlint
 --   type: exitcode-stdio-1.0
 --   main-is: hlint.hs
